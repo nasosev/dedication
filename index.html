@@ -146,6 +146,16 @@
             letter-spacing: var(--title-letter-spacing);
             margin: var(--title-margin-top) 0 var(--title-margin-bottom) 0;
             color: #ffffff;
+            --glow-1: 16px;
+            --glow-2: 28px;
+            --glow-3: 44px;
+            --glow-4: 70px;
+            text-shadow:
+                0 0 var(--glow-1) currentColor,
+                0 0 var(--glow-2) currentColor,
+                0 0 var(--glow-3) currentColor,
+                0 0 var(--glow-4) currentColor,
+                1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         .words {
@@ -155,6 +165,19 @@
             word-spacing: var(--words-word-spacing);
             margin: var(--words-margin-vertical) 0 var(--words-margin-vertical) 0;
             color: #e8dcc8;
+        }
+
+        .word {
+            --glow-1: 16px;
+            --glow-2: 28px;
+            --glow-3: 44px;
+            --glow-4: 70px;
+            text-shadow:
+                0 0 var(--glow-1) currentColor,
+                0 0 var(--glow-2) currentColor,
+                0 0 var(--glow-3) currentColor,
+                0 0 var(--glow-4) currentColor,
+                1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         .mandala {
@@ -523,12 +546,34 @@
                 padding: 10px 14px;
             }
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           Accessibility - Reduced Motion Support
+           ══════════════════════════════════════════════════════════════ */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            /* Pause all video animations */
+            video {
+                animation-play-state: paused !important;
+            }
+
+            /* Disable JavaScript-driven animations via data attribute */
+            *[data-animate] {
+                animation: none !important;
+            }
+
+            /* Reduce opacity transitions to instant */
+            .naso-photo {
+                transition: opacity 0.3s ease-in-out;
+            }
+        }
     </style>
 </head>
 
 <body>
     <!-- Sound Control -->
-    <div id="sound-control">sound: on</div>
+    <button id="sound-control" aria-label="Toggle sacred sound" role="button" tabindex="0">sound: on</button>
 
     <center>
         <!-- ═══════════════════════════════════════════════════════════
@@ -575,33 +620,33 @@
             <span class="space word">true</span>
         </div>
 
-        <img class="mandala" src="img/mandalas/mandala-1.png" alt="Mandala">
+        <img class="mandala" src="img/mandalas/mandala-1.png" alt="Mandala" loading="lazy">
 
         <!-- Offerings -->
-        <video class="altar" autoplay loop muted playsinline>
+        <video class="altar" autoplay loop muted playsinline preload="none" aria-label="Sacred altar with candlelight">
             <source src="img/alter-slow.mp4" type="video/mp4">
         </video>
 
-        <img class="mandala" src="img/mandalas/mandala-2.png" alt="Mandala">
+        <img class="mandala" src="img/mandalas/mandala-2.png" alt="Mandala" loading="lazy">
 
-        <img class="angel" src="img/angel-1.png" alt="Angel">
+        <img class="angel" src="img/angel-1.png" alt="Angel" loading="lazy">
 
-        <img class="mandala" src="img/mandalas/mandala-3.png" alt="Mandala">
+        <img class="mandala" src="img/mandalas/mandala-3.png" alt="Mandala" loading="lazy">
 
-        <img class="angel" src="img/angel-2.png" alt="Angel">
+        <img class="angel" src="img/angel-2.png" alt="Angel" loading="lazy">
 
-        <img class="mandala" src="img/mandalas/mandala-4.png" alt="Mandala">
+        <img class="mandala" src="img/mandalas/mandala-4.png" alt="Mandala" loading="lazy">
 
-        <video class="altar" autoplay loop muted playsinline>
+        <video class="altar" autoplay loop muted playsinline preload="none" aria-label="Sacred offerings in gentle focus">
             <source src="img/zoom-slow.mp4" type="video/mp4">
         </video>
 
-        <img class="mandala" src="img/mandalas/mandala-5.png" alt="Mandala">
+        <img class="mandala" src="img/mandalas/mandala-5.png" alt="Mandala" loading="lazy">
 
         <div class="naso-photos">
-            <img class="angel naso-photo" src="img/temple-naso.jpg" alt="Naso at Temple">
-            <img class="angel naso-photo" src="img/forest-naso.jpg" alt="Naso in Forest">
-            <img class="angel naso-photo" src="img/candle-naso.jpg" alt="Naso with Candle">
+            <img class="angel naso-photo" src="img/temple-naso.jpg" alt="Naso at Temple" loading="lazy">
+            <img class="angel naso-photo" src="img/forest-naso.jpg" alt="Naso in Forest" loading="lazy">
+            <img class="angel naso-photo" src="img/candle-naso.jpg" alt="Naso with Candle" loading="lazy">
         </div>
 
         <div class="footer">
@@ -620,18 +665,30 @@
         const om = document.getElementById('om');
         let isPlaying = false;
 
-        soundControl.addEventListener('click', function () {
+        function toggleSound() {
             if (isPlaying) {
                 om.pause();
                 isPlaying = false;
                 soundControl.textContent = 'sound: off';
+                soundControl.setAttribute('aria-label', 'Play sacred sound');
             } else {
                 om.play().then(() => {
                     isPlaying = true;
                     soundControl.textContent = 'sound: on';
+                    soundControl.setAttribute('aria-label', 'Pause sacred sound');
                 }).catch(err => {
                     console.log('Playback error:', err);
                 });
+            }
+        }
+
+        soundControl.addEventListener('click', toggleSound);
+
+        // Keyboard accessibility
+        soundControl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleSound();
             }
         });
 
@@ -639,10 +696,12 @@
         om.play().then(() => {
             isPlaying = true;
             soundControl.textContent = 'sound: on';
+            soundControl.setAttribute('aria-label', 'Pause sacred sound');
         }).catch(err => {
             console.log('Autoplay blocked - click sound control to play');
             isPlaying = false;
             soundControl.textContent = 'sound: off';
+            soundControl.setAttribute('aria-label', 'Play sacred sound');
         });
     </script>
 

@@ -105,6 +105,12 @@ function glow(word) {
     function updateGlow(time) {
         if (!word.glowState) return;
 
+        // Performance: skip if paused (off-screen or reduced motion)
+        if (word.glowState.paused) {
+            requestAnimationFrame(updateGlow);
+            return;
+        }
+
         const t = time * 0.001; // Convert to seconds
         const state = word.glowState;
 
@@ -139,13 +145,11 @@ function glow(word) {
 
         // Intensity breathing through both glow and opacity
         word.style.opacity = opacity;
-        word.style.textShadow = `
-            0 0 ${glow1}px currentColor,
-            0 0 ${glow2}px currentColor,
-            0 0 ${glow3}px currentColor,
-            0 0 ${glow4}px currentColor,
-            1px 1px 3px rgba(0, 0, 0, 0.5)
-        `;
+        // Use CSS custom properties for better performance
+        word.style.setProperty('--glow-1', `${glow1}px`);
+        word.style.setProperty('--glow-2', `${glow2}px`);
+        word.style.setProperty('--glow-3', `${glow3}px`);
+        word.style.setProperty('--glow-4', `${glow4}px`);
 
         requestAnimationFrame(updateGlow);
     }
@@ -177,6 +181,12 @@ function animateMandala(mandala) {
     function updateMandala(time) {
         if (!mandala.mandalaState) return;
 
+        // Performance: skip if paused (off-screen or reduced motion)
+        if (mandala.mandalaState.paused) {
+            requestAnimationFrame(updateMandala);
+            return;
+        }
+
         const t = time * 0.001; // Convert to seconds
         const state = mandala.mandalaState;
 
@@ -204,7 +214,6 @@ function animateMandala(mandala) {
  */
 function drift(word) {
     if (!word) {
-        console.error('drift called with invalid word');
         return;
     }
 
@@ -219,10 +228,14 @@ function drift(word) {
         time: 0
     };
 
-    console.log(`Starting drift for: ${word.textContent}`);
-
     function updateDrift(timestamp) {
         if (!word.driftState) return;
+
+        // Performance: skip if paused (off-screen or reduced motion)
+        if (word.driftState.paused) {
+            requestAnimationFrame(updateDrift);
+            return;
+        }
 
         const state = word.driftState;
         state.time = timestamp;
@@ -279,6 +292,12 @@ function breatheMask(element) {
     function updateMask(time) {
         if (!element.maskState) return;
 
+        // Performance: skip if paused (off-screen or reduced motion)
+        if (element.maskState.paused) {
+            requestAnimationFrame(updateMask);
+            return;
+        }
+
         const t = time * 0.001;
         const state = element.maskState;
 
@@ -311,58 +330,75 @@ function breatheMask(element) {
 }
 
 /**
+ * Performance optimization - pause animations when off-screen or reduced motion preferred
+ */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// IntersectionObserver to pause off-screen animations
+const animationObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const element = entry.target;
+        if (element.glowState) {
+            element.glowState.paused = !entry.isIntersecting || prefersReducedMotion;
+        }
+        if (element.driftState) {
+            element.driftState.paused = !entry.isIntersecting || prefersReducedMotion;
+        }
+        if (element.mandalaState) {
+            element.mandalaState.paused = !entry.isIntersecting || prefersReducedMotion;
+        }
+        if (element.maskState) {
+            element.maskState.paused = !entry.isIntersecting || prefersReducedMotion;
+        }
+    });
+}, {
+    rootMargin: '50px' // Start animating slightly before element enters viewport
+});
+
+/**
  * Initialize the temple breath
  * When the temple appears, everything begins its eternal dance
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Temple initialized');
-
     // Breathe the title
     const title = document.querySelector('h1');
     if (title) {
-        console.log('Animating title: Dedication');
         glow(title);
+        animationObserver.observe(title);
     }
 
     // Begin the glow and drift cycles for each sacred word
     const words = document.querySelectorAll('.word');
-    console.log(`Found ${words.length} words to animate`);
-
-    words.forEach((word, index) => {
-        console.log(`Animating word ${index}: ${word.textContent}`);
+    words.forEach((word) => {
         glow(word);
         drift(word);
+        animationObserver.observe(word);
     });
 
     // Animate the sacred mandalas
     const mandalas = document.querySelectorAll('.mandala');
-    console.log(`Found ${mandalas.length} mandalas to animate`);
-
-    mandalas.forEach((mandala, index) => {
-        console.log(`Animating mandala ${index}`);
+    mandalas.forEach((mandala) => {
         animateMandala(mandala);
         breatheMask(mandala);
+        animationObserver.observe(mandala);
     });
 
     // Breathe the transparency on all images
     const angels = document.querySelectorAll('.angel');
-    console.log(`Found ${angels.length} angel images to breathe`);
-    angels.forEach((angel, index) => {
-        console.log(`Breathing mask for angel ${index}`);
+    angels.forEach((angel) => {
         breatheMask(angel);
+        animationObserver.observe(angel);
     });
 
     const altars = document.querySelectorAll('.altar');
-    console.log(`Found ${altars.length} altar images to breathe`);
-    altars.forEach((altar, index) => {
-        console.log(`Breathing mask for altar ${index}`);
+    altars.forEach((altar) => {
         breatheMask(altar);
+        animationObserver.observe(altar);
     });
 
     const offerings = document.querySelectorAll('.offering');
-    console.log(`Found ${offerings.length} offering images to breathe`);
-    offerings.forEach((offering, index) => {
-        console.log(`Breathing mask for offering ${index}`);
+    offerings.forEach((offering) => {
         breatheMask(offering);
+        animationObserver.observe(offering);
     });
 });
