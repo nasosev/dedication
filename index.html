@@ -23,7 +23,7 @@
 
     <script>
         // Randomly select background tile before page renders
-        const tileNumber = Math.random() < 0.5 ? 1 : 2;
+        const tileNumber = Math.floor(Math.random() * 3) + 1;  // Selects 1, 2, or 3
         document.documentElement.style.setProperty('--bg-tile', `url('img/tile-${tileNumber}.png')`);
     </script>
 
@@ -34,7 +34,7 @@
 
         :root {
             /* Background */
-            --bg-tile-size: 50%;
+            --bg-tile-size: 60%;
 
             /* Spacing - Outer containers */
             --center-padding-vertical: 140px;
@@ -592,13 +592,17 @@
 
         <img class="mandala" src="img/mandalas/mandala-4.png" alt="Mandala">
 
+        <video class="altar" autoplay loop muted playsinline>
+            <source src="img/zoom-slow.mp4" type="video/mp4">
+        </video>
+
+        <img class="mandala" src="img/mandalas/mandala-5.png" alt="Mandala">
+
         <div class="naso-photos">
             <img class="angel naso-photo" src="img/temple-naso.jpg" alt="Naso at Temple">
             <img class="angel naso-photo" src="img/forest-naso.jpg" alt="Naso in Forest">
             <img class="angel naso-photo" src="img/candle-naso.jpg" alt="Naso with Candle">
         </div>
-
-        <img class="mandala" src="img/mandalas/mandala-5.png" alt="Mandala">
 
         <div class="footer">
             <a href="https://nilradical.net">nilradical.net</a>
