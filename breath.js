@@ -45,11 +45,11 @@ const SACRED_TIMING = {
     GLOW_LAYER_4: 3.5,                // Outermost glow multiplier
 
     // Word Scale - Subtle size breathing
-    SCALE_VARIATION: 0.06,            // Creates 0.97-1.03 range
+    SCALE_VARIATION: 0.2,            // Creates gentle zoom in and out
 
     // Mandala Rotation - Eternal wheel turning
-    MANDALA_ROTATION_MIN: 1200,       // 20 minutes per rotation (seconds)
-    MANDALA_ROTATION_MAX: 1800,       // 30 minutes per rotation (seconds)
+    MANDALA_ROTATION_MIN: 600,       // 10 minutes per rotation (seconds)
+    MANDALA_ROTATION_MAX: 1200,       // 20 minutes per rotation (seconds)
     MANDALA_BREATH_FREQ_MIN: 0.15,    // Opacity breathing min (Hz)
     MANDALA_BREATH_FREQ_MAX: 0.25,    // Opacity breathing max (Hz)
     MANDALA_BASE_OPACITY: 0.8,        // Starting opacity
