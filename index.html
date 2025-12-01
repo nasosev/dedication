@@ -57,8 +57,10 @@
             --mandala-max-width: 280px;
             --mandala-margin-top: 280px;
             --mandala-margin-bottom: 380px;
-            --mandala-fade-inner: 15%;
-            --mandala-fade-outer: 85%;
+
+            /* Image edge fading - applies to all images */
+            --image-fade-inner: 25%;
+            --image-fade-outer: 75%;
 
             /* Images - Candles */
             --candle-width: 140px;
@@ -126,7 +128,7 @@
             background-repeat: repeat;
             background-size: var(--bg-tile-size);
             color: #ffd87d;
-            font-family: Georgia, serif;
+            font-family: Optima, "Optima Nova", sans-serif;
             margin: 0;
             padding: 0;
             color-scheme: dark;
@@ -188,24 +190,24 @@
             display: block;
             mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             mask-composite: intersect;
             -webkit-mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             -webkit-mask-composite: source-in;
         }
@@ -281,24 +283,24 @@
             border-radius: var(--offering-border-radius);
             mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             mask-composite: intersect;
             -webkit-mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             -webkit-mask-composite: source-in;
         }
@@ -312,24 +314,24 @@
             display: block;
             mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             mask-composite: intersect;
             -webkit-mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             -webkit-mask-composite: source-in;
         }
@@ -370,24 +372,24 @@
             display: block;
             mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             mask-composite: intersect;
             -webkit-mask-image: linear-gradient(to bottom,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%),
                 linear-gradient(to right,
                     transparent 0%,
-                    black var(--mandala-fade-inner),
-                    black var(--mandala-fade-outer),
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
                     transparent 100%);
             -webkit-mask-composite: source-in;
         }
@@ -419,7 +421,7 @@
             position: fixed;
             bottom: var(--sound-control-bottom);
             right: var(--sound-control-right);
-            font-family: Georgia, serif;
+            font-family: Optima, "Optima Nova", sans-serif;
             font-size: var(--sound-control-size);
             color: #ffd87d;
             cursor: pointer;
