@@ -37,26 +37,26 @@
             --bg-tile-size: 70%;
 
             /* Spacing - Outer containers */
-            --center-padding-vertical: 140px;
+            --center-padding-vertical: 0px;
             --center-padding-horizontal: 20px;
 
             /* Typography - Title */
             --title-size: 60px;
             --title-letter-spacing: 12px;
-            --title-margin-top: 120px;
-            --title-margin-bottom: 220px;
+            --title-margin-top: 50vh;
+            --title-margin-bottom: 100vh;
 
             /* Typography - Sacred words */
-            --words-size: 22px;
+            --words-size: 28px;
             --words-line-height: 3.2;
             --words-letter-spacing: 2px;
-            --words-word-spacing: 20px;
+            --words-word-spacing: 40px;
             --words-margin-vertical: 100px;
 
             /* Images - Mandalas */
             --mandala-max-width: 280px;
-            --mandala-margin-top: 280px;
-            --mandala-margin-bottom: 380px;
+            --mandala-margin-top: 50vh;
+            --mandala-margin-bottom: 50vh;
 
             /* Image edge fading - applies to all images */
             --image-fade-inner: 25%;
@@ -110,10 +110,10 @@
             --footer-size: 16px;
 
             /* Mobile adjustments */
-            --mobile-center-padding: 80px 20px;
+            --mobile-center-padding: 0px 20px;
             --mobile-title-size: 36px;
             --mobile-title-spacing: 6px;
-            --mobile-words-size: 11px;
+            --mobile-words-size: 14px;
             --mobile-candle-width: 50px;
             --mobile-mandala-max-width: 130px;
             --mobile-spacing-reduced: 200px;
@@ -146,7 +146,8 @@
             font-size: var(--title-size);
             font-weight: normal;
             letter-spacing: var(--title-letter-spacing);
-            margin: var(--title-margin-top) 0 var(--title-margin-bottom) 0;
+            margin: 0 0 var(--title-margin-bottom) 0;
+            padding-top: calc(50vh - var(--title-size) / 2);
             color: #ffffff;
             --glow-1: 16px;
             --glow-2: 28px;
@@ -170,15 +171,19 @@
         }
 
         .word {
-            --glow-1: 16px;
-            --glow-2: 28px;
-            --glow-3: 44px;
-            --glow-4: 70px;
+            --glow-1: 8px;
+            --glow-2: 16px;
+            --glow-3: 28px;
+            --glow-4: 44px;
+            --glow-5: 70px;
             text-shadow:
                 0 0 var(--glow-1) currentColor,
                 0 0 var(--glow-2) currentColor,
                 0 0 var(--glow-3) currentColor,
                 0 0 var(--glow-4) currentColor,
+                0 0 var(--glow-5) currentColor,
+                0 0 2px currentColor,
+                0 0 4px currentColor,
                 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
@@ -461,14 +466,15 @@
             h1 {
                 font-size: var(--mobile-title-size);
                 letter-spacing: var(--mobile-title-spacing);
-                margin: 100px 0 140px 0;
+                margin: 0 0 100vh 0;
+                padding-top: calc(50vh - var(--mobile-title-size) / 2);
             }
 
             .words {
                 font-size: var(--mobile-words-size);
                 line-height: 2.5;
                 letter-spacing: 0.5px;
-                word-spacing: 10px;
+                word-spacing: 20px;
                 margin: 100px 0;
             }
 
@@ -496,7 +502,7 @@
 
             .mandala {
                 max-width: var(--mobile-mandala-max-width);
-                margin: 180px auto 220px auto;
+                margin: 50vh auto 50vh auto;
             }
 
             .offering-pair {
