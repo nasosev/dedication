@@ -21,6 +21,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>dedication</title>
 
+    <!-- Sacred Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
+
     <script>
         // Randomly select background tile before page renders
         const tileNumber = Math.floor(Math.random() * 3) + 1;  // Selects 1, 2, or 3
@@ -128,7 +133,7 @@
             background-repeat: repeat;
             background-size: var(--bg-tile-size);
             color: #ffd87d;
-            font-family: Skia, "Gill Sans", "Gill Sans MT", "Trebuchet MS", "Segoe UI", Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: 'Philosopher', sans-serif;
             margin: 0;
             padding: 0;
             color-scheme: dark;
@@ -167,24 +172,48 @@
             letter-spacing: var(--words-letter-spacing);
             word-spacing: var(--words-word-spacing);
             margin: var(--words-margin-vertical) 0 var(--words-margin-vertical) 0;
-            color: #e8dcc8;
+            color: #f5f0e8;
+            font-weight: 500;
         }
 
         .word {
-            --glow-1: 8px;
-            --glow-2: 16px;
-            --glow-3: 28px;
-            --glow-4: 44px;
-            --glow-5: 70px;
+            --glow-1: 6px;
+            --glow-2: 12px;
+            --glow-3: 24px;
+            position: relative;
+            display: inline-block;
+            isolation: isolate;
             text-shadow:
                 0 0 var(--glow-1) currentColor,
                 0 0 var(--glow-2) currentColor,
                 0 0 var(--glow-3) currentColor,
-                0 0 var(--glow-4) currentColor,
-                0 0 var(--glow-5) currentColor,
-                0 0 2px currentColor,
-                0 0 4px currentColor,
-                1px 1px 3px rgba(0, 0, 0, 0.5);
+                2px 2px 4px rgba(0, 0, 0, 0.5),
+                1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .word::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(0);
+            width: 135%;
+            height: 160%;
+            background: radial-gradient(ellipse at 45% 40%,
+                rgba(255, 240, 200, 0.6) 0%,
+                rgba(255, 240, 200, 0.5) 15%,
+                rgba(255, 240, 200, 0.38) 30%,
+                rgba(255, 240, 200, 0.24) 50%,
+                rgba(255, 240, 200, 0.12) 65%,
+                transparent 85%);
+            filter: blur(12px);
+            z-index: -1;
+            border-radius: 35% 65% 45% 75% / 55% 45% 65% 55%;
+            box-shadow:
+                0 0 40px rgba(255, 240, 200, 0.4),
+                0 0 80px rgba(255, 240, 200, 0.25),
+                0 0 120px rgba(255, 240, 200, 0.12);
+            pointer-events: none;
         }
 
         .mandala {
@@ -222,23 +251,23 @@
            ══════════════════════════════════════════════════════════════ */
 
         .earth {
-            color: #ffd87d;
-            text-shadow: 0 0 16px #ffd87d;
+            color: #ffcc33;
+            text-shadow: 0 0 16px #ffcc33;
         }
 
         .water {
-            color: #87ceeb;
-            text-shadow: 0 0 16px #87ceeb;
+            color: #5dade2;
+            text-shadow: 0 0 16px #5dade2;
         }
 
         .fire {
-            color: #e8755b;
-            text-shadow: 0 0 16px #e8755b;
+            color: #ff6b4a;
+            text-shadow: 0 0 16px #ff6b4a;
         }
 
         .air {
-            color: #81b29a;
-            text-shadow: 0 0 16px #81b29a;
+            color: #6dd9a8;
+            text-shadow: 0 0 16px #6dd9a8;
         }
 
         .space {
@@ -426,7 +455,7 @@
             position: fixed;
             bottom: var(--sound-control-bottom);
             right: var(--sound-control-right);
-            font-family: Skia, "Gill Sans", "Gill Sans MT", "Trebuchet MS", "Segoe UI", Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: 'Philosopher', sans-serif;
             font-size: var(--sound-control-size);
             color: #ffd87d;
             cursor: pointer;

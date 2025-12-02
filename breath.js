@@ -69,6 +69,13 @@ const SPATIAL_QUALITIES = {
     DRIFT_VARIATION: 0.05,            // Random velocity changes
     DRIFT_DAMPENING: 0.95,            // Velocity decay (closer to 1 = less friction)
     DRIFT_BOUNCE: -0.5,               // Boundary bounce factor
+
+    // Magnetic Interaction - Cursor/touch response
+    MAGNETIC_EASE: 0.015,             // Interpolation speed (lower = slower, more organic)
+    MAGNETIC_RADIUS_DESKTOP: 200,     // Detection radius for mouse (px)
+    MAGNETIC_RADIUS_MOBILE: 180,      // Detection radius for touch (px)
+    MAGNETIC_PULL_STRENGTH: 5,        // Maximum pull distance multiplier
+    MAGNETIC_SCALE_MAX: 1,         // Maximum growth
 };
 
 // Utilities
@@ -228,6 +235,22 @@ function drift(word) {
         time: 0
     };
 
+    // Initialize magnetic state for cursor interaction
+    word.magneticState = {
+        // Current values (smoothly interpolated)
+        pullX: 0,
+        pullY: 0,
+        magneticScale: 1.0,
+
+        // Target values (set by cursor/touch)
+        targetPullX: 0,
+        targetPullY: 0,
+        targetScale: 1.0,
+
+        // Smooth easing factor (lower = slower, more organic)
+        ease: SPATIAL_QUALITIES.MAGNETIC_EASE
+    };
+
     function updateDrift(timestamp) {
         if (!word.driftState) return;
 
@@ -263,9 +286,27 @@ function drift(word) {
             state.y = Math.sign(state.y) * SPATIAL_QUALITIES.DRIFT_RANGE;
         }
 
-        // Apply the transform with scale from glow breathing
-        const scale = word.glowState?.currentScale || 1.0;
-        word.style.transform = `translate(${state.x}px, ${state.y}px) scale(${scale})`;
+        // Smoothly interpolate magnetic values toward targets (organic easing)
+        if (word.magneticState) {
+            const mag = word.magneticState;
+
+            // Gradually move current values toward targets
+            mag.pullX += (mag.targetPullX - mag.pullX) * mag.ease;
+            mag.pullY += (mag.targetPullY - mag.pullY) * mag.ease;
+            mag.magneticScale += (mag.targetScale - mag.magneticScale) * mag.ease;
+        }
+
+        // Apply the transform with scale from glow breathing + magnetic scale
+        const breathScale = word.glowState?.currentScale || 1.0;
+        const magneticScale = word.magneticState?.magneticScale || 1.0;
+        const magneticPullX = word.magneticState?.pullX || 0;
+        const magneticPullY = word.magneticState?.pullY || 0;
+
+        const totalScale = breathScale * magneticScale;
+        const totalX = state.x + magneticPullX;
+        const totalY = state.y + magneticPullY;
+
+        word.style.transform = `translate(${totalX}px, ${totalY}px) scale(${totalScale})`;
 
         // Continue the animation
         requestAnimationFrame(updateDrift);
@@ -356,6 +397,102 @@ const animationObserver = new IntersectionObserver((entries) => {
 });
 
 /**
+ * Magnetic cursor/touch interaction
+ * Words gently respond to proximity - growing and pulling toward interaction
+ */
+function initializeMagnetism() {
+    const words = document.querySelectorAll('.word');
+    const wordsContainer = document.querySelector('.words');
+
+    if (!wordsContainer || words.length === 0) return;
+
+    // Track mouse movement - set targets, not immediate values
+    wordsContainer.addEventListener('mousemove', function (e) {
+        words.forEach(word => {
+            if (!word.magneticState) return;
+
+            const rect = word.getBoundingClientRect();
+            const wordCenterX = rect.left + rect.width / 2;
+            const wordCenterY = rect.top + rect.height / 2;
+
+            const deltaX = e.clientX - wordCenterX;
+            const deltaY = e.clientY - wordCenterY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            const magneticRadius = SPATIAL_QUALITIES.MAGNETIC_RADIUS_DESKTOP;
+
+            if (distance < magneticRadius) {
+                // Smooth cubic easing for more organic falloff
+                const linear = 1 - (distance / magneticRadius);
+                const strength = linear * linear * (3 - 2 * linear); // smoothstep
+
+                // Gentler pull but much larger potential growth
+                word.magneticState.targetPullX = (deltaX / distance) * strength * SPATIAL_QUALITIES.MAGNETIC_PULL_STRENGTH;
+                word.magneticState.targetPullY = (deltaY / distance) * strength * SPATIAL_QUALITIES.MAGNETIC_PULL_STRENGTH;
+                word.magneticState.targetScale = 1.0 + (strength * SPATIAL_QUALITIES.MAGNETIC_SCALE_MAX);
+            } else {
+                word.magneticState.targetPullX = 0;
+                word.magneticState.targetPullY = 0;
+                word.magneticState.targetScale = 1.0;
+            }
+        });
+    });
+
+    // Reset on mouse leave - targets will gradually return to normal
+    wordsContainer.addEventListener('mouseleave', function () {
+        words.forEach(word => {
+            if (word.magneticState) {
+                word.magneticState.targetPullX = 0;
+                word.magneticState.targetPullY = 0;
+                word.magneticState.targetScale = 1.0;
+            }
+        });
+    });
+
+    // Touch support - same gentle approach
+    wordsContainer.addEventListener('touchmove', function (e) {
+        const touch = e.touches[0];
+        words.forEach(word => {
+            if (!word.magneticState) return;
+
+            const rect = word.getBoundingClientRect();
+            const wordCenterX = rect.left + rect.width / 2;
+            const wordCenterY = rect.top + rect.height / 2;
+
+            const deltaX = touch.clientX - wordCenterX;
+            const deltaY = touch.clientY - wordCenterY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            const magneticRadius = SPATIAL_QUALITIES.MAGNETIC_RADIUS_MOBILE;
+
+            if (distance < magneticRadius) {
+                const linear = 1 - (distance / magneticRadius);
+                const strength = linear * linear * (3 - 2 * linear); // smoothstep
+
+                word.magneticState.targetPullX = (deltaX / distance) * strength * SPATIAL_QUALITIES.MAGNETIC_PULL_STRENGTH;
+                word.magneticState.targetPullY = (deltaY / distance) * strength * SPATIAL_QUALITIES.MAGNETIC_PULL_STRENGTH;
+                word.magneticState.targetScale = 1.0 + (strength * SPATIAL_QUALITIES.MAGNETIC_SCALE_MAX);
+            } else {
+                word.magneticState.targetPullX = 0;
+                word.magneticState.targetPullY = 0;
+                word.magneticState.targetScale = 1.0;
+            }
+        });
+    }, { passive: true });
+
+    // Reset on touch end - gradual return
+    wordsContainer.addEventListener('touchend', function () {
+        words.forEach(word => {
+            if (word.magneticState) {
+                word.magneticState.targetPullX = 0;
+                word.magneticState.targetPullY = 0;
+                word.magneticState.targetScale = 1.0;
+            }
+        });
+    });
+}
+
+/**
  * Initialize the temple breath
  * When the temple appears, everything begins its eternal dance
  */
@@ -374,6 +511,9 @@ document.addEventListener('DOMContentLoaded', () => {
         drift(word);
         animationObserver.observe(word);
     });
+
+    // Initialize magnetic cursor interaction
+    initializeMagnetism();
 
     // Animate the sacred mandalas
     const mandalas = document.querySelectorAll('.mandala');
