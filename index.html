@@ -20,6 +20,7 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>dedication</title>
+    <link rel="icon" type="image/png" href="img/mandalas/mandala-0.png">
 
     <!-- Sacred Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,7 +79,7 @@
             --image-fade-outer: 75%;
 
             /* Images - Candles */
-            --candle-width: 140px;
+            --candle-width: 150px;
             --candles-margin-top: 120px;
             --candles-offset-horizontal: 10px;
 
@@ -231,12 +232,12 @@
             width: 120%;
             height: 140%;
             background: radial-gradient(ellipse at 45% 40%,
-                var(--cloud-center) 0%,
-                var(--cloud-inner) 15%,
-                var(--cloud-mid) 30%,
-                var(--cloud-outer) 50%,
-                var(--cloud-edge) 65%,
-                transparent 85%);
+                    var(--cloud-center) 0%,
+                    var(--cloud-inner) 15%,
+                    var(--cloud-mid) 30%,
+                    var(--cloud-outer) 50%,
+                    var(--cloud-edge) 65%,
+                    transparent 85%);
             filter: blur(10px);
             z-index: -1;
             border-radius: 35% 65% 45% 75% / 55% 45% 65% 55%;
@@ -335,6 +336,28 @@
         .candle {
             width: var(--candle-width);
             height: auto;
+            mask-image: linear-gradient(to bottom,
+                    transparent 0%,
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
+                    transparent 100%),
+                linear-gradient(to right,
+                    transparent 0%,
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
+                    transparent 100%);
+            mask-composite: intersect;
+            -webkit-mask-image: linear-gradient(to bottom,
+                    transparent 0%,
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
+                    transparent 100%),
+                linear-gradient(to right,
+                    transparent 0%,
+                    black var(--image-fade-inner),
+                    black var(--image-fade-outer),
+                    transparent 100%);
+            -webkit-mask-composite: source-in;
         }
 
         .offering-pair {
@@ -655,6 +678,8 @@
              ══════════════════════════════════════════════════════════ -->
 
         <h1>Dedication</h1>
+
+        <img class="mandala" src="img/mandalas/mandala-0.png" alt="Mandala" loading="lazy">
 
         <div class="candles-container">
             <picture>

@@ -649,4 +649,10 @@ document.addEventListener('DOMContentLoaded', () => {
         breatheMask(offering);
         animationObserver.observe(offering);
     });
+
+    const candles = document.querySelectorAll('.candle');
+    candles.forEach((candle) => {
+        breatheMask(candle);
+        animationObserver.observe(candle);
+    });
 });
