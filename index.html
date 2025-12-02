@@ -172,14 +172,14 @@
             letter-spacing: var(--words-letter-spacing);
             word-spacing: var(--words-word-spacing);
             margin: var(--words-margin-vertical) 0 var(--words-margin-vertical) 0;
-            color: #f5f0e8;
-            font-weight: 500;
+            color: #ffffff;
+            font-weight: 400;
         }
 
         .word {
-            --glow-1: 6px;
-            --glow-2: 12px;
-            --glow-3: 24px;
+            --glow-1: 8px;
+            --glow-2: 16px;
+            --glow-3: 32px;
             position: relative;
             display: inline-block;
             isolation: isolate;
@@ -187,8 +187,9 @@
                 0 0 var(--glow-1) currentColor,
                 0 0 var(--glow-2) currentColor,
                 0 0 var(--glow-3) currentColor,
-                2px 2px 4px rgba(0, 0, 0, 0.5),
-                1px 1px 2px rgba(0, 0, 0, 0.6);
+                2px 2px 6px rgba(0, 0, 0, 0.8),
+                1px 1px 3px rgba(0, 0, 0, 0.9),
+                0px 0px 1px rgba(0, 0, 0, 1);
         }
 
         .word::before {
