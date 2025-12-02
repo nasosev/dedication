@@ -58,15 +58,15 @@
             --words-word-spacing: 40px;
             --words-margin-vertical: 100px;
 
-            /* Cloud colors - Earth/terracotta gradient */
-            --cloud-center: rgba(100, 70, 50, 0.95);
-            --cloud-inner: rgba(120, 85, 60, 0.85);
-            --cloud-mid: rgba(140, 100, 75, 0.65);
-            --cloud-outer: rgba(160, 120, 90, 0.45);
-            --cloud-edge: rgba(180, 140, 110, 0.25);
-            --cloud-shadow-inner: rgba(100, 70, 50, 0.6);
-            --cloud-shadow-mid: rgba(140, 100, 75, 0.45);
-            --cloud-shadow-outer: rgba(160, 120, 90, 0.3);
+            /* Cloud colors - Royal terracotta light */
+            --cloud-center: rgba(160, 110, 80, 0.95);
+            --cloud-inner: rgba(175, 125, 95, 0.85);
+            --cloud-mid: rgba(190, 140, 110, 0.65);
+            --cloud-outer: rgba(205, 155, 125, 0.45);
+            --cloud-edge: rgba(220, 170, 140, 0.25);
+            --cloud-shadow-inner: rgba(160, 110, 80, 0.6);
+            --cloud-shadow-mid: rgba(190, 140, 110, 0.45);
+            --cloud-shadow-outer: rgba(205, 155, 125, 0.3);
 
             /* Images - Mandalas */
             --mandala-max-width: 280px;
@@ -120,7 +120,7 @@
             --sound-control-opacity-hover: 1;
 
             /* Footer */
-            --footer-margin-top: 40px;
+            --footer-margin-top: 600px;
             --footer-padding-bottom: 120px;
             --footer-size: 16px;
 
@@ -228,8 +228,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) translateZ(0);
-            width: 135%;
-            height: 160%;
+            width: 120%;
+            height: 140%;
             background: radial-gradient(ellipse at 45% 40%,
                 var(--cloud-center) 0%,
                 var(--cloud-inner) 15%,
@@ -237,13 +237,13 @@
                 var(--cloud-outer) 50%,
                 var(--cloud-edge) 65%,
                 transparent 85%);
-            filter: blur(12px);
+            filter: blur(10px);
             z-index: -1;
             border-radius: 35% 65% 45% 75% / 55% 45% 65% 55%;
             box-shadow:
-                0 0 40px var(--cloud-shadow-inner),
-                0 0 80px var(--cloud-shadow-mid),
-                0 0 120px var(--cloud-shadow-outer);
+                0 0 25px var(--cloud-shadow-inner),
+                0 0 50px var(--cloud-shadow-mid),
+                0 0 75px var(--cloud-shadow-outer);
             pointer-events: none;
         }
 
@@ -477,6 +477,7 @@
 
         .footer {
             margin-top: var(--footer-margin-top);
+            padding-top: 150px;
             padding-bottom: var(--footer-padding-bottom);
             font-size: var(--footer-size);
         }
@@ -606,7 +607,8 @@
             }
 
             .footer {
-                margin-top: 50px;
+                margin-top: 200px;
+                padding-top: 100px;
                 padding-bottom: 140px;
                 font-size: 14px;
             }
