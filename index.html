@@ -137,10 +137,26 @@
             margin: 0;
             padding: 0;
             color-scheme: dark;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            touch-action: pan-y;
+            overscroll-behavior: none;
         }
 
         center {
             padding: var(--center-padding-vertical) var(--center-padding-horizontal);
+        }
+
+        /* Prevent image dragging and improve touch handling */
+        img,
+        video {
+            pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -174,6 +190,7 @@
             margin: var(--words-margin-vertical) 0 var(--words-margin-vertical) 0;
             color: #ffffff;
             font-weight: 400;
+            cursor: default;
         }
 
         .word {
@@ -190,6 +207,9 @@
                 2px 2px 6px rgba(0, 0, 0, 0.8),
                 1px 1px 3px rgba(0, 0, 0, 0.9),
                 0px 0px 1px rgba(0, 0, 0, 1);
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         .word::before {
@@ -201,19 +221,19 @@
             width: 135%;
             height: 160%;
             background: radial-gradient(ellipse at 45% 40%,
-                rgba(255, 240, 200, 0.6) 0%,
-                rgba(255, 240, 200, 0.5) 15%,
-                rgba(255, 240, 200, 0.38) 30%,
-                rgba(255, 240, 200, 0.24) 50%,
-                rgba(255, 240, 200, 0.12) 65%,
+                rgba(255, 250, 235, 0.6) 0%,
+                rgba(255, 250, 235, 0.5) 15%,
+                rgba(255, 250, 235, 0.38) 30%,
+                rgba(255, 250, 235, 0.24) 50%,
+                rgba(255, 250, 235, 0.12) 65%,
                 transparent 85%);
             filter: blur(12px);
             z-index: -1;
             border-radius: 35% 65% 45% 75% / 55% 45% 65% 55%;
             box-shadow:
-                0 0 40px rgba(255, 240, 200, 0.4),
-                0 0 80px rgba(255, 240, 200, 0.25),
-                0 0 120px rgba(255, 240, 200, 0.12);
+                0 0 40px rgba(255, 250, 235, 0.4),
+                0 0 80px rgba(255, 250, 235, 0.25),
+                0 0 120px rgba(255, 250, 235, 0.12);
             pointer-events: none;
         }
 
@@ -245,6 +265,9 @@
                     black var(--image-fade-outer),
                     transparent 100%);
             -webkit-mask-composite: source-in;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         /* ═══════════════════════════════════════════════════════════════
