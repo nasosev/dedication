@@ -34,8 +34,8 @@ const SACRED_TIMING = {
     GLOW_TERTIARY_AMPLITUDE_MAX: 0.03,
 
     // Word Glow - Intensity values
-    GLOW_BASE_OPACITY: 0.75,          // Starting opacity
-    GLOW_MIN_OPACITY: 0.7,            // Dimmest breath
+    GLOW_BASE_OPACITY: 0.9,           // Starting opacity
+    GLOW_MIN_OPACITY: 0.85,           // Dimmest breath
     GLOW_MAX_OPACITY: 1.0,            // Brightest breath
     GLOW_MIN_INTENSITY: 10,           // Minimum glow radius (px)
     GLOW_MAX_INTENSITY: 120,          // Maximum glow radius (px)
