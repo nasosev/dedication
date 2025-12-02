@@ -58,6 +58,16 @@
             --words-word-spacing: 40px;
             --words-margin-vertical: 100px;
 
+            /* Cloud colors - Earth/terracotta gradient */
+            --cloud-center: rgba(100, 70, 50, 0.95);
+            --cloud-inner: rgba(120, 85, 60, 0.85);
+            --cloud-mid: rgba(140, 100, 75, 0.65);
+            --cloud-outer: rgba(160, 120, 90, 0.45);
+            --cloud-edge: rgba(180, 140, 110, 0.25);
+            --cloud-shadow-inner: rgba(100, 70, 50, 0.6);
+            --cloud-shadow-mid: rgba(140, 100, 75, 0.45);
+            --cloud-shadow-outer: rgba(160, 120, 90, 0.3);
+
             /* Images - Mandalas */
             --mandala-max-width: 280px;
             --mandala-margin-top: 50vh;
@@ -221,19 +231,19 @@
             width: 135%;
             height: 160%;
             background: radial-gradient(ellipse at 45% 40%,
-                rgba(255, 250, 235, 0.6) 0%,
-                rgba(255, 250, 235, 0.5) 15%,
-                rgba(255, 250, 235, 0.38) 30%,
-                rgba(255, 250, 235, 0.24) 50%,
-                rgba(255, 250, 235, 0.12) 65%,
+                var(--cloud-center) 0%,
+                var(--cloud-inner) 15%,
+                var(--cloud-mid) 30%,
+                var(--cloud-outer) 50%,
+                var(--cloud-edge) 65%,
                 transparent 85%);
             filter: blur(12px);
             z-index: -1;
             border-radius: 35% 65% 45% 75% / 55% 45% 65% 55%;
             box-shadow:
-                0 0 40px rgba(255, 250, 235, 0.4),
-                0 0 80px rgba(255, 250, 235, 0.25),
-                0 0 120px rgba(255, 250, 235, 0.12);
+                0 0 40px var(--cloud-shadow-inner),
+                0 0 80px var(--cloud-shadow-mid),
+                0 0 120px var(--cloud-shadow-outer);
             pointer-events: none;
         }
 
