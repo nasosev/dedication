@@ -75,7 +75,13 @@ const SPATIAL_QUALITIES = {
     MAGNETIC_RADIUS_DESKTOP: 200,     // Detection radius for mouse (px)
     MAGNETIC_RADIUS_MOBILE: 180,      // Detection radius for touch (px)
     MAGNETIC_PULL_STRENGTH: 5,        // Maximum pull distance multiplier
-    MAGNETIC_SCALE_MAX: 1,         // Maximum growth
+    MAGNETIC_SCALE_MAX: 1,            // Maximum growth
+
+    // Mandala Magnetic Interaction
+    MANDALA_MAGNETIC_RADIUS_DESKTOP: 150,  // Detection radius for mouse (px)
+    MANDALA_MAGNETIC_RADIUS_MOBILE: 120,   // Detection radius for touch (px)
+    MANDALA_SPEED_MULTIPLIER_MAX: 40,      // Maximum speed increase (40x faster)
+    MANDALA_MAGNETIC_EASE: 0.003,          // Interpolation speed for mandala responses
 };
 
 // Utilities
@@ -171,7 +177,7 @@ function glow(word) {
 function animateMandala(mandala) {
     const mandalaState = {
         // Rotation - each mandala has unique tempo (20-30 minutes per full rotation)
-        rotationSpeed: random(
+        baseRotationSpeed: random(
             1 / SACRED_TIMING.MANDALA_ROTATION_MAX,
             1 / SACRED_TIMING.MANDALA_ROTATION_MIN
         ) * Math.PI * 2, // radians per second
@@ -180,7 +186,15 @@ function animateMandala(mandala) {
         frequency: random(SACRED_TIMING.MANDALA_BREATH_FREQ_MIN, SACRED_TIMING.MANDALA_BREATH_FREQ_MAX) * Math.PI * 2,
         phase: random(0, Math.PI * 2),
         baseOpacity: SACRED_TIMING.MANDALA_BASE_OPACITY,
-        amplitude: SACRED_TIMING.MANDALA_BREATH_AMPLITUDE
+        amplitude: SACRED_TIMING.MANDALA_BREATH_AMPLITUDE,
+
+        // Magnetic interaction state
+        currentSpeedMultiplier: 1.0,
+        targetSpeedMultiplier: 1.0,
+
+        // Cumulative rotation tracking
+        cumulativeRotation: 0,
+        lastTime: null
     };
 
     mandala.mandalaState = mandalaState;
@@ -188,18 +202,35 @@ function animateMandala(mandala) {
     function updateMandala(time) {
         if (!mandala.mandalaState) return;
 
+        const t = time * 0.001; // Convert to seconds
+        const state = mandala.mandalaState;
+
         // Performance: skip if paused (off-screen or reduced motion)
-        if (mandala.mandalaState.paused) {
+        if (state.paused) {
+            // Reset lastTime when paused to avoid jumps on resume
+            state.lastTime = null;
             requestAnimationFrame(updateMandala);
             return;
         }
 
-        const t = time * 0.001; // Convert to seconds
-        const state = mandala.mandalaState;
+        // Initialize lastTime on first frame or after pause
+        if (state.lastTime === null) {
+            state.lastTime = t;
+            requestAnimationFrame(updateMandala);
+            return;
+        }
 
-        // Slow continuous rotation
-        const rotation = (t * state.rotationSpeed) % (Math.PI * 2);
-        const degrees = rotation * (180 / Math.PI);
+        const deltaTime = t - state.lastTime;
+        state.lastTime = t;
+
+        // Smoothly interpolate speed multiplier toward target
+        state.currentSpeedMultiplier += (state.targetSpeedMultiplier - state.currentSpeedMultiplier) * SPATIAL_QUALITIES.MANDALA_MAGNETIC_EASE;
+
+        // Apply speed multiplier to rotation and accumulate
+        const activeRotationSpeed = state.baseRotationSpeed * state.currentSpeedMultiplier;
+        state.cumulativeRotation += activeRotationSpeed * deltaTime;
+
+        const degrees = (state.cumulativeRotation * (180 / Math.PI)) % 360;
 
         // Subtle breathing through subtle opacity variation (very gentle)
         const breathe = Math.sin(t * state.frequency + state.phase) * state.amplitude;
@@ -493,6 +524,80 @@ function initializeMagnetism() {
 }
 
 /**
+ * Magnetic mandala interaction
+ * Mandalas respond to proximity by temporarily increasing rotation speed
+ */
+function initializeMandalaInteraction() {
+    const mandalas = document.querySelectorAll('.mandala');
+
+    if (mandalas.length === 0) return;
+
+    // Handle mouse movement
+    document.addEventListener('mousemove', function(e) {
+        mandalas.forEach(mandala => {
+            if (!mandala.mandalaState) return;
+
+            const rect = mandala.getBoundingClientRect();
+            const mandalaCenterX = rect.left + rect.width / 2;
+            const mandalaCenterY = rect.top + rect.height / 2;
+
+            const deltaX = e.clientX - mandalaCenterX;
+            const deltaY = e.clientY - mandalaCenterY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            const magneticRadius = SPATIAL_QUALITIES.MANDALA_MAGNETIC_RADIUS_DESKTOP;
+
+            if (distance < magneticRadius) {
+                // Smooth cubic easing for organic falloff
+                const linear = 1 - (distance / magneticRadius);
+                const strength = linear * linear * (3 - 2 * linear); // smoothstep
+
+                // Set target speed multiplier based on proximity
+                mandala.mandalaState.targetSpeedMultiplier = 1.0 + (strength * (SPATIAL_QUALITIES.MANDALA_SPEED_MULTIPLIER_MAX - 1.0));
+            } else {
+                mandala.mandalaState.targetSpeedMultiplier = 1.0;
+            }
+        });
+    });
+
+    // Handle touch movement
+    document.addEventListener('touchmove', function(e) {
+        const touch = e.touches[0];
+        mandalas.forEach(mandala => {
+            if (!mandala.mandalaState) return;
+
+            const rect = mandala.getBoundingClientRect();
+            const mandalaCenterX = rect.left + rect.width / 2;
+            const mandalaCenterY = rect.top + rect.height / 2;
+
+            const deltaX = touch.clientX - mandalaCenterX;
+            const deltaY = touch.clientY - mandalaCenterY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            const magneticRadius = SPATIAL_QUALITIES.MANDALA_MAGNETIC_RADIUS_MOBILE;
+
+            if (distance < magneticRadius) {
+                const linear = 1 - (distance / magneticRadius);
+                const strength = linear * linear * (3 - 2 * linear); // smoothstep
+
+                mandala.mandalaState.targetSpeedMultiplier = 1.0 + (strength * (SPATIAL_QUALITIES.MANDALA_SPEED_MULTIPLIER_MAX - 1.0));
+            } else {
+                mandala.mandalaState.targetSpeedMultiplier = 1.0;
+            }
+        });
+    }, { passive: true });
+
+    // Reset on touch end
+    document.addEventListener('touchend', function() {
+        mandalas.forEach(mandala => {
+            if (mandala.mandalaState) {
+                mandala.mandalaState.targetSpeedMultiplier = 1.0;
+            }
+        });
+    });
+}
+
+/**
  * Initialize the temple breath
  * When the temple appears, everything begins its eternal dance
  */
@@ -522,6 +627,9 @@ document.addEventListener('DOMContentLoaded', () => {
         breatheMask(mandala);
         animationObserver.observe(mandala);
     });
+
+    // Initialize mandala magnetic interaction
+    initializeMandalaInteraction();
 
     // Breathe the transparency on all images
     const angels = document.querySelectorAll('.angel');
