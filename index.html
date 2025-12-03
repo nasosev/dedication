@@ -16,9 +16,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Immersive App Experience -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Dedication">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#e4e4e4">
+
+    <!-- Social Sharing -->
+    <meta property="og:title" content="Dedication - A Digital Sacred Space">
+    <meta property="og:description" content="A space of reverence for contemplative practice">
+    <meta property="og:image" content="img/mandalas/mandala-0.png">
+    <meta property="og:type" content="website">
+
     <title>dedication</title>
     <link rel="icon" type="image/png" href="img/mandalas/mandala-0.png">
 
@@ -39,6 +51,15 @@
            ══════════════════════════════════════════════════════════════ */
 
         :root {
+            /* Colors - Elemental palette */
+            --color-earth: #d4c9b8;
+            --color-water: #b8c9d4;
+            --color-fire: #d4beb8;
+            --color-air: #bdd4c6;
+            --color-space: #e4e4e4;
+            --color-title: #ffffff;
+            --color-glow: #ffd87d;
+
             /* Background */
             --bg-tile-size: 70%;
 
@@ -139,11 +160,16 @@
            Foundation
            ══════════════════════════════════════════════════════════════ */
 
+        html {
+            overscroll-behavior: none;
+            overflow: auto;
+        }
+
         body {
             background-image: var(--bg-tile);
             background-repeat: repeat;
             background-size: var(--bg-tile-size);
-            color: #ffd87d;
+            color: var(--color-glow);
             font-family: 'Philosopher', sans-serif;
             margin: 0;
             padding: 0;
@@ -156,6 +182,8 @@
             -webkit-touch-callout: none;
             touch-action: pan-y;
             overscroll-behavior: none;
+            cursor: default;
+            position: relative;
         }
 
         center {
@@ -184,7 +212,7 @@
             letter-spacing: var(--title-letter-spacing);
             margin: 0 0 var(--title-margin-bottom) 0;
             padding-top: calc(50vh - var(--title-size) / 2);
-            color: #ffffff;
+            color: var(--color-title);
             --glow-1: 16px;
             --glow-2: 28px;
             --glow-3: 44px;
@@ -203,7 +231,7 @@
             letter-spacing: var(--words-letter-spacing);
             word-spacing: var(--words-word-spacing);
             margin: var(--words-margin-vertical) 0 var(--words-margin-vertical) 0;
-            color: #ffffff;
+            color: var(--color-title);
             font-weight: 400;
             cursor: default;
         }
@@ -295,28 +323,28 @@
            ══════════════════════════════════════════════════════════════ */
 
         .earth {
-            color: #d4c9b8;
-            text-shadow: 0 0 16px #d4c9b8;
+            color: var(--color-earth);
+            text-shadow: 0 0 16px var(--color-earth);
         }
 
         .water {
-            color: #b8c9d4;
-            text-shadow: 0 0 16px #b8c9d4;
+            color: var(--color-water);
+            text-shadow: 0 0 16px var(--color-water);
         }
 
         .fire {
-            color: #d4beb8;
-            text-shadow: 0 0 16px #d4beb8;
+            color: var(--color-fire);
+            text-shadow: 0 0 16px var(--color-fire);
         }
 
         .air {
-            color: #bdd4c6;
-            text-shadow: 0 0 16px #bdd4c6;
+            color: var(--color-air);
+            text-shadow: 0 0 16px var(--color-air);
         }
 
         .space {
-            color: #e4e4e4;
-            text-shadow: 0 0 16px #e4e4e4;
+            color: var(--color-space);
+            text-shadow: 0 0 16px var(--color-space);
         }
 
         /* ═══════════════════════════════════════════════════════════════
