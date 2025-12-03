@@ -47,6 +47,10 @@ const SACRED_TIMING = {
     // Word Scale - Subtle size breathing
     SCALE_VARIATION: 0.2,            // Creates gentle zoom in and out
 
+    // Word Saturation - Color intensity breathing
+    SATURATION_MIN: 0,               // Minimum color saturation (grayscale)
+    SATURATION_MAX: 2.0,             // Maximum color saturation (more vivid)
+
     // Mandala Rotation - Eternal wheel turning
     MANDALA_ROTATION_MIN: 600,       // 10 minutes per rotation (seconds)
     MANDALA_ROTATION_MAX: 1200,       // 20 minutes per rotation (seconds)
@@ -71,7 +75,7 @@ const SPATIAL_QUALITIES = {
     DRIFT_BOUNCE: -0.5,               // Boundary bounce factor
 
     // Magnetic Interaction - Cursor/touch response
-    MAGNETIC_EASE: 0.005,             // Interpolation speed (lower = slower, more organic)
+    MAGNETIC_EASE: 0.002,             // Interpolation speed (lower = slower, more organic)
     MAGNETIC_RADIUS_DESKTOP: 200,     // Detection radius for mouse (px)
     MAGNETIC_RADIUS_MOBILE: 180,      // Detection radius for touch (px)
     MAGNETIC_PULL_STRENGTH: 5,        // Maximum pull distance multiplier
@@ -156,8 +160,13 @@ function glow(word) {
         const scale = 1.0 + (normalizedWave - 0.5) * SACRED_TIMING.SCALE_VARIATION;
         state.currentScale = scale;
 
+        // Calculate saturation breathing (color intensity)
+        const saturation = SACRED_TIMING.SATURATION_MIN +
+            (SACRED_TIMING.SATURATION_MAX - SACRED_TIMING.SATURATION_MIN) * normalizedWave;
+
         // Intensity breathing through both glow and opacity
         word.style.opacity = opacity;
+        word.style.filter = `saturate(${saturation})`;
         // Use CSS custom properties for better performance
         word.style.setProperty('--glow-1', `${glow1}px`);
         word.style.setProperty('--glow-2', `${glow2}px`);

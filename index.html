@@ -59,15 +59,15 @@
             --words-word-spacing: 40px;
             --words-margin-vertical: 100px;
 
-            /* Cloud colors - Royal terracotta light */
-            --cloud-center: rgba(160, 110, 80, 0.95);
-            --cloud-inner: rgba(175, 125, 95, 0.85);
-            --cloud-mid: rgba(190, 140, 110, 0.65);
-            --cloud-outer: rgba(205, 155, 125, 0.45);
-            --cloud-edge: rgba(220, 170, 140, 0.25);
-            --cloud-shadow-inner: rgba(160, 110, 80, 0.6);
-            --cloud-shadow-mid: rgba(190, 140, 110, 0.45);
-            --cloud-shadow-outer: rgba(205, 155, 125, 0.3);
+            /* Cloud colors - Dusty plum */
+            --cloud-center: rgba(150, 105, 110, 0.95);
+            --cloud-inner: rgba(165, 120, 125, 0.85);
+            --cloud-mid: rgba(180, 135, 140, 0.65);
+            --cloud-outer: rgba(195, 150, 155, 0.45);
+            --cloud-edge: rgba(210, 165, 170, 0.25);
+            --cloud-shadow-inner: rgba(150, 105, 110, 0.6);
+            --cloud-shadow-mid: rgba(180, 135, 140, 0.45);
+            --cloud-shadow-outer: rgba(195, 150, 155, 0.3);
 
             /* Images - Mandalas */
             --mandala-max-width: 280px;
@@ -100,9 +100,9 @@
             --naso-photos-width: 80%;
             --naso-photos-height: 520px;
             --naso-photos-margin: 240px;
-            --naso-photo-opacity-inactive: 0.3;
+            --naso-photo-opacity-inactive: 0.25;
             --naso-photo-opacity-active: 1;
-            --naso-photo-transition: 6s;
+            --naso-photo-transition: 8s;
 
             /* Images - Altars */
             --altar-max-width: 800px;
@@ -121,7 +121,7 @@
             --sound-control-opacity-hover: 1;
 
             /* Footer */
-            --footer-margin-top: 600px;
+            --footer-margin-top: 300px;
             --footer-padding-bottom: 120px;
             --footer-size: 16px;
 
@@ -163,9 +163,13 @@
         }
 
         /* Prevent image dragging and improve touch handling */
-        img,
-        video {
+        img {
             pointer-events: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        video {
             -webkit-user-drag: none;
             user-drag: none;
         }
@@ -205,9 +209,10 @@
         }
 
         .word {
-            --glow-1: 8px;
-            --glow-2: 16px;
-            --glow-3: 32px;
+            --glow-1: 12px;
+            --glow-2: 24px;
+            --glow-3: 40px;
+            --glow-4: 60px;
             position: relative;
             display: inline-block;
             isolation: isolate;
@@ -215,6 +220,10 @@
                 0 0 var(--glow-1) currentColor,
                 0 0 var(--glow-2) currentColor,
                 0 0 var(--glow-3) currentColor,
+                0 0 var(--glow-4) currentColor,
+                0 0 8px rgba(255, 255, 255, 0.8),
+                0 0 16px rgba(255, 255, 255, 0.6),
+                0 0 32px rgba(255, 255, 255, 0.4),
                 2px 2px 6px rgba(0, 0, 0, 0.8),
                 1px 1px 3px rgba(0, 0, 0, 0.9),
                 0px 0px 1px rgba(0, 0, 0, 1);
@@ -660,9 +669,9 @@
                 animation: none !important;
             }
 
-            /* Reduce opacity transitions to instant */
+            /* Reduce opacity transitions for accessibility */
             .naso-photo {
-                transition: opacity 0.3s ease-in-out;
+                transition: opacity 1s ease-in-out;
             }
         }
     </style>
@@ -722,7 +731,7 @@
         <img class="mandala" src="img/mandalas/mandala-1.png" alt="Mandala" loading="lazy">
 
         <!-- Offerings -->
-        <video class="altar" autoplay loop muted playsinline preload="none" aria-label="Sacred altar with candlelight">
+        <video class="altar" loop muted playsinline preload="metadata" aria-label="Sacred altar with candlelight">
             <source src="img/alter-slow.mp4" type="video/mp4">
         </video>
 
@@ -736,7 +745,7 @@
 
         <img class="mandala" src="img/mandalas/mandala-4.png" alt="Mandala" loading="lazy">
 
-        <video class="altar" autoplay loop muted playsinline preload="none"
+        <video class="altar" loop muted playsinline preload="metadata"
             aria-label="Sacred offerings in gentle focus">
             <source src="img/zoom-slow-pingpong.mp4" type="video/mp4">
         </video>
@@ -808,7 +817,7 @@
     <script src="breath.js"></script>
 
     <script>
-        // Naso Photo Morphing - Slow crossfade between images
+        // Naso Photo Morphing - Slow bleeding crossfade between images
         const nasoPhotos = document.querySelectorAll('.naso-photo');
         let currentPhotoIndex = 0;
 
@@ -832,6 +841,104 @@
 
         // Morph every 28 seconds (slow, reverent pace)
         setInterval(morphPhotos, 28000);
+    </script>
+
+    <script>
+        // Altar Video - Slow spin up/down on hover/touch
+        const altarVideos = document.querySelectorAll('.altar');
+
+        altarVideos.forEach(video => {
+            // Load and show first frame
+            video.load();
+            video.videoState = {
+                targetSpeed: 0,
+                currentSpeed: 0,
+                animating: false
+            };
+
+            function updateVideoSpeed() {
+                const state = video.videoState;
+
+                // Smoothly interpolate speed
+                state.currentSpeed += (state.targetSpeed - state.currentSpeed) * 0.08;
+
+                // Set playback rate (minimum 0.01 to keep video "alive" when playing)
+                if (state.currentSpeed > 0.001) {
+                    video.playbackRate = Math.max(0.01, state.currentSpeed);
+                    if (video.paused) {
+                        video.play().catch(() => {});
+                    }
+                } else {
+                    if (!video.paused) {
+                        video.pause();
+                    }
+                }
+
+                // Continue animating if not close enough to target
+                if (Math.abs(state.currentSpeed - state.targetSpeed) > 0.001) {
+                    state.animating = true;
+                    requestAnimationFrame(updateVideoSpeed);
+                } else {
+                    state.animating = false;
+                }
+            }
+
+            // Mouse hover
+            video.addEventListener('mouseenter', function() {
+                this.videoState.targetSpeed = 1.0;
+                if (!this.videoState.animating) {
+                    updateVideoSpeed();
+                }
+            });
+
+            video.addEventListener('mouseleave', function() {
+                this.videoState.targetSpeed = 0;
+                if (!this.videoState.animating) {
+                    updateVideoSpeed();
+                }
+            });
+
+            // Touch support
+            video.addEventListener('touchstart', function() {
+                this.videoState.targetSpeed = 1.0;
+                if (!this.videoState.animating) {
+                    updateVideoSpeed();
+                }
+            });
+
+            // Pause when touch moves away from video
+            document.addEventListener('touchmove', function(e) {
+                const touch = e.touches[0];
+                altarVideos.forEach(vid => {
+                    const rect = vid.getBoundingClientRect();
+                    const isOverVideo = touch.clientX >= rect.left &&
+                                       touch.clientX <= rect.right &&
+                                       touch.clientY >= rect.top &&
+                                       touch.clientY <= rect.bottom;
+
+                    if (!isOverVideo) {
+                        vid.videoState.targetSpeed = 0;
+                        if (!vid.videoState.animating) {
+                            updateVideoSpeed.call(vid);
+                        }
+                    } else if (isOverVideo) {
+                        vid.videoState.targetSpeed = 1.0;
+                        if (!vid.videoState.animating) {
+                            updateVideoSpeed.call(vid);
+                        }
+                    }
+                });
+            }, { passive: true });
+
+            document.addEventListener('touchend', function() {
+                altarVideos.forEach(vid => {
+                    vid.videoState.targetSpeed = 0;
+                    if (!vid.videoState.animating) {
+                        updateVideoSpeed.call(vid);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 
