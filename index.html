@@ -732,7 +732,7 @@
 
         <!-- Offerings -->
         <video class="altar" loop muted playsinline preload="metadata" aria-label="Sacred altar with candlelight">
-            <source src="img/alter-slow.mp4" type="video/mp4">
+            <source src="img/alter.mp4" type="video/mp4">
         </video>
 
         <img class="mandala" src="img/mandalas/mandala-2.png" alt="Mandala" loading="lazy">
@@ -745,8 +745,7 @@
 
         <img class="mandala" src="img/mandalas/mandala-4.png" alt="Mandala" loading="lazy">
 
-        <video class="altar" loop muted playsinline preload="metadata"
-            aria-label="Sacred offerings in gentle focus">
+        <video class="altar" loop muted playsinline preload="metadata" aria-label="Sacred offerings in gentle focus">
             <source src="img/zoom-slow-pingpong.mp4" type="video/mp4">
         </video>
 
@@ -844,98 +843,48 @@
     </script>
 
     <script>
-        // Altar Video - Slow spin up/down on hover/touch
+        // Altar Video - Play on hover/touch
         const altarVideos = document.querySelectorAll('.altar');
 
         altarVideos.forEach(video => {
             // Load and show first frame
             video.load();
-            video.videoState = {
-                targetSpeed: 0,
-                currentSpeed: 0,
-                animating: false
-            };
-
-            function updateVideoSpeed() {
-                const state = video.videoState;
-
-                // Smoothly interpolate speed
-                state.currentSpeed += (state.targetSpeed - state.currentSpeed) * 0.08;
-
-                // Set playback rate (minimum 0.01 to keep video "alive" when playing)
-                if (state.currentSpeed > 0.001) {
-                    video.playbackRate = Math.max(0.01, state.currentSpeed);
-                    if (video.paused) {
-                        video.play().catch(() => {});
-                    }
-                } else {
-                    if (!video.paused) {
-                        video.pause();
-                    }
-                }
-
-                // Continue animating if not close enough to target
-                if (Math.abs(state.currentSpeed - state.targetSpeed) > 0.001) {
-                    state.animating = true;
-                    requestAnimationFrame(updateVideoSpeed);
-                } else {
-                    state.animating = false;
-                }
-            }
 
             // Mouse hover
-            video.addEventListener('mouseenter', function() {
-                this.videoState.targetSpeed = 1.0;
-                if (!this.videoState.animating) {
-                    updateVideoSpeed();
-                }
+            video.addEventListener('mouseenter', function () {
+                this.play().catch(() => { });
             });
 
-            video.addEventListener('mouseleave', function() {
-                this.videoState.targetSpeed = 0;
-                if (!this.videoState.animating) {
-                    updateVideoSpeed();
-                }
+            video.addEventListener('mouseleave', function () {
+                this.pause();
             });
 
             // Touch support
-            video.addEventListener('touchstart', function() {
-                this.videoState.targetSpeed = 1.0;
-                if (!this.videoState.animating) {
-                    updateVideoSpeed();
-                }
+            video.addEventListener('touchstart', function () {
+                this.play().catch(() => { });
             });
 
             // Pause when touch moves away from video
-            document.addEventListener('touchmove', function(e) {
+            document.addEventListener('touchmove', function (e) {
                 const touch = e.touches[0];
                 altarVideos.forEach(vid => {
                     const rect = vid.getBoundingClientRect();
                     const isOverVideo = touch.clientX >= rect.left &&
-                                       touch.clientX <= rect.right &&
-                                       touch.clientY >= rect.top &&
-                                       touch.clientY <= rect.bottom;
+                        touch.clientX <= rect.right &&
+                        touch.clientY >= rect.top &&
+                        touch.clientY <= rect.bottom;
 
                     if (!isOverVideo) {
-                        vid.videoState.targetSpeed = 0;
-                        if (!vid.videoState.animating) {
-                            updateVideoSpeed.call(vid);
-                        }
+                        vid.pause();
                     } else if (isOverVideo) {
-                        vid.videoState.targetSpeed = 1.0;
-                        if (!vid.videoState.animating) {
-                            updateVideoSpeed.call(vid);
-                        }
+                        vid.play().catch(() => { });
                     }
                 });
             }, { passive: true });
 
-            document.addEventListener('touchend', function() {
+            document.addEventListener('touchend', function () {
                 altarVideos.forEach(vid => {
-                    vid.videoState.targetSpeed = 0;
-                    if (!vid.videoState.animating) {
-                        updateVideoSpeed.call(vid);
-                    }
+                    vid.pause();
                 });
             });
         });
