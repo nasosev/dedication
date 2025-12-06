@@ -43,7 +43,7 @@
         /* ═══════════════════════════════════════════════════════════════
            Sacred Constants
            ══════════════════════════════════════════════════════════════ */
-        const MAX_TILES = 4;  // Number of background tiles available
+        const MAX_TILES = 3;  // Number of background tiles available
 
         // Randomly select background tile before page renders
         const tileNumber = Math.floor(Math.random() * MAX_TILES) + 1;  // Selects 1 to MAX_TILES
@@ -85,15 +85,15 @@
             --words-word-spacing: 40px;
             --words-margin-vertical: 100px;
 
-            /* Cloud colors - Dusty plum */
-            --cloud-center: rgba(150, 105, 110, 0.95);
-            --cloud-inner: rgba(165, 120, 125, 0.85);
-            --cloud-mid: rgba(180, 135, 140, 0.65);
-            --cloud-outer: rgba(195, 150, 155, 0.45);
-            --cloud-edge: rgba(210, 165, 170, 0.25);
-            --cloud-shadow-inner: rgba(150, 105, 110, 0.6);
-            --cloud-shadow-mid: rgba(180, 135, 140, 0.45);
-            --cloud-shadow-outer: rgba(195, 150, 155, 0.3);
+            /* Cloud colors - Dusty indigo */
+            --cloud-center: rgba(40, 55, 85, 0.95);
+            --cloud-inner: rgba(50, 65, 95, 0.85);
+            --cloud-mid: rgba(60, 75, 105, 0.65);
+            --cloud-outer: rgba(70, 85, 115, 0.45);
+            --cloud-edge: rgba(80, 95, 125, 0.25);
+            --cloud-shadow-inner: rgba(40, 55, 85, 0.6);
+            --cloud-shadow-mid: rgba(60, 75, 105, 0.45);
+            --cloud-shadow-outer: rgba(70, 85, 115, 0.3);
 
             /* Shadow colors - For text and elements */
             --shadow-black-light: rgba(0, 0, 0, 0.5);
@@ -755,6 +755,13 @@
 
         <img class="mandala" src="img/mandalas/mandala-0.png" alt="Mandala" loading="lazy">
 
+        <!-- Offerings -->
+        <video class="altar" loop muted playsinline preload="metadata" aria-label="Sacred altar with candlelight">
+            <source src="img/alter.mp4" type="video/mp4">
+        </video>
+
+        <img class="mandala" src="img/mandalas/mandala-1.png" alt="Mandala" loading="lazy">
+
         <div class="candles-container">
             <picture>
                 <source srcset="anim/honey-candle-1.webp" type="image/webp">
@@ -792,13 +799,6 @@
             <span class="air word">teaching</span>
             <span class="space word">true</span>
         </div>
-
-        <img class="mandala" src="img/mandalas/mandala-1.png" alt="Mandala" loading="lazy">
-
-        <!-- Offerings -->
-        <video class="altar" loop muted playsinline preload="metadata" aria-label="Sacred altar with candlelight">
-            <source src="img/alter.mp4" type="video/mp4">
-        </video>
 
         <img class="mandala" src="img/mandalas/mandala-2.png" alt="Mandala" loading="lazy">
 

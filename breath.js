@@ -68,9 +68,9 @@ const SACRED_TIMING = {
 
 const SPATIAL_QUALITIES = {
     // Word Drift - Gentle floating movement
-    DRIFT_RANGE: 15,                  // Maximum drift distance (px)
+    DRIFT_RANGE: 100,                  // Maximum drift distance (px)
     DRIFT_SPEED: 0.1,                 // Base drift velocity
-    DRIFT_VARIATION: 0.05,            // Random velocity changes
+    DRIFT_VARIATION: 0.1,            // Random velocity changes
     DRIFT_DAMPENING: 0.95,            // Velocity decay (closer to 1 = less friction)
     DRIFT_BOUNCE: -0.5,               // Boundary bounce factor
 
@@ -79,7 +79,7 @@ const SPATIAL_QUALITIES = {
     MAGNETIC_RADIUS_DESKTOP: 200,     // Detection radius for mouse (px)
     MAGNETIC_RADIUS_MOBILE: 180,      // Detection radius for touch (px)
     MAGNETIC_PULL_STRENGTH: 5,        // Maximum pull distance multiplier
-    MAGNETIC_SCALE_MAX: 1,            // Maximum growth
+    MAGNETIC_SCALE_MAX: 3,            // Maximum growth
 
     // Mandala Magnetic Interaction
     MANDALA_MAGNETIC_RADIUS_DESKTOP: 150,  // Detection radius for mouse (px)
@@ -542,7 +542,7 @@ function initializeMandalaInteraction() {
     if (mandalas.length === 0) return;
 
     // Handle mouse movement
-    document.addEventListener('mousemove', function(e) {
+    document.addEventListener('mousemove', function (e) {
         mandalas.forEach(mandala => {
             if (!mandala.mandalaState) return;
 
@@ -570,7 +570,7 @@ function initializeMandalaInteraction() {
     });
 
     // Handle touch movement
-    document.addEventListener('touchmove', function(e) {
+    document.addEventListener('touchmove', function (e) {
         const touch = e.touches[0];
         mandalas.forEach(mandala => {
             if (!mandala.mandalaState) return;
@@ -597,7 +597,7 @@ function initializeMandalaInteraction() {
     }, { passive: true });
 
     // Reset on touch end
-    document.addEventListener('touchend', function() {
+    document.addEventListener('touchend', function () {
         mandalas.forEach(mandala => {
             if (mandala.mandalaState) {
                 mandala.mandalaState.targetSpeedMultiplier = 1.0;
