@@ -40,9 +40,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
+        /* ═══════════════════════════════════════════════════════════════
+           Sacred Constants
+           ══════════════════════════════════════════════════════════════ */
+        const MAX_TILES = 4;  // Number of background tiles available
+
         // Randomly select background tile before page renders
-        const tileNumber = Math.floor(Math.random() * 2) + 1;  // Selects 1 or 2
-        document.documentElement.style.setProperty('--bg-tile', `url('img/tile-${tileNumber}.png')`);
+        const tileNumber = Math.floor(Math.random() * MAX_TILES) + 1;  // Selects 1 to MAX_TILES
+        document.documentElement.style.setProperty('--bg-tile', `url('img/tiles/tile-${tileNumber}.png')`);
     </script>
 
     <style>
@@ -89,6 +94,19 @@
             --cloud-shadow-inner: rgba(150, 105, 110, 0.6);
             --cloud-shadow-mid: rgba(180, 135, 140, 0.45);
             --cloud-shadow-outer: rgba(195, 150, 155, 0.3);
+
+            /* Shadow colors - For text and elements */
+            --shadow-black-light: rgba(0, 0, 0, 0.5);
+            --shadow-black-medium: rgba(0, 0, 0, 0.8);
+            --shadow-black-heavy: rgba(0, 0, 0, 0.9);
+            --shadow-black-solid: rgba(0, 0, 0, 1);
+            --shadow-white-strong: rgba(255, 255, 255, 0.8);
+            --shadow-white-medium: rgba(255, 255, 255, 0.6);
+            --shadow-white-light: rgba(255, 255, 255, 0.4);
+            --shadow-earth-strong: rgba(212, 201, 184, 0.5);
+            --shadow-earth-medium: rgba(212, 201, 184, 0.4);
+            --shadow-earth-light: rgba(212, 201, 184, 0.3);
+            --shadow-earth-subtle: rgba(212, 201, 184, 0.2);
 
             /* Images - Mandalas */
             --mandala-max-width: 280px;
@@ -143,6 +161,7 @@
 
             /* Footer */
             --footer-margin-top: 300px;
+            --footer-padding-top: 150px;
             --footer-padding-bottom: 120px;
             --footer-size: 16px;
 
@@ -154,6 +173,14 @@
             --mobile-candle-width: 50px;
             --mobile-mandala-max-width: 130px;
             --mobile-spacing-reduced: 200px;
+            --mobile-footer-margin-top: 200px;
+            --mobile-footer-padding-top: 100px;
+            --mobile-footer-padding-bottom: 140px;
+            --mobile-footer-size: 14px;
+            --mobile-sound-control-position: 15px;
+            --mobile-sound-control-size: 16px;
+            --mobile-sound-control-padding-vertical: 10px;
+            --mobile-sound-control-padding-horizontal: 14px;
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -222,7 +249,7 @@
                 0 0 var(--glow-2) currentColor,
                 0 0 var(--glow-3) currentColor,
                 0 0 var(--glow-4) currentColor,
-                1px 1px 3px rgba(0, 0, 0, 0.5);
+                1px 1px 3px var(--shadow-black-light);
         }
 
         .words {
@@ -249,12 +276,12 @@
                 0 0 var(--glow-2) currentColor,
                 0 0 var(--glow-3) currentColor,
                 0 0 var(--glow-4) currentColor,
-                0 0 8px rgba(255, 255, 255, 0.8),
-                0 0 16px rgba(255, 255, 255, 0.6),
-                0 0 32px rgba(255, 255, 255, 0.4),
-                2px 2px 6px rgba(0, 0, 0, 0.8),
-                1px 1px 3px rgba(0, 0, 0, 0.9),
-                0px 0px 1px rgba(0, 0, 0, 1);
+                0 0 8px var(--shadow-white-strong),
+                0 0 16px var(--shadow-white-medium),
+                0 0 32px var(--shadow-white-light),
+                2px 2px 6px var(--shadow-black-medium),
+                1px 1px 3px var(--shadow-black-heavy),
+                0px 0px 1px var(--shadow-black-solid);
             will-change: transform, opacity;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
@@ -531,13 +558,13 @@
            ══════════════════════════════════════════════════════════════ */
 
         a {
-            color: #ffffff;
+            color: var(--color-title);
             text-decoration: none;
         }
 
         .footer {
             margin-top: var(--footer-margin-top);
-            padding-top: 150px;
+            padding-top: var(--footer-padding-top);
             padding-bottom: var(--footer-padding-bottom);
             font-size: var(--footer-size);
         }
@@ -552,19 +579,29 @@
             right: var(--sound-control-right);
             font-family: 'Philosopher', sans-serif;
             font-size: var(--sound-control-size);
-            color: #ffd87d;
+            color: var(--color-earth);
             cursor: pointer;
             opacity: var(--sound-control-opacity);
             z-index: 100;
             padding: var(--sound-control-padding-vertical) var(--sound-control-padding-horizontal);
-            border: var(--sound-control-border) solid #ffd87d;
+            border: var(--sound-control-border) solid var(--color-earth);
             background: none;
-            box-shadow: 0 0 20px rgba(255, 215, 125, 0.3);
+            box-shadow:
+                0 0 20px var(--shadow-earth-medium),
+                0 0 40px var(--shadow-earth-light),
+                0 0 60px var(--shadow-earth-subtle);
+            text-shadow:
+                0 0 12px var(--color-earth),
+                0 0 24px var(--color-earth),
+                0 0 40px var(--color-earth);
         }
 
         #sound-control:hover {
             opacity: var(--sound-control-opacity-hover);
-            box-shadow: 0 0 30px rgba(255, 215, 125, 0.5);
+            box-shadow:
+                0 0 30px var(--shadow-earth-strong),
+                0 0 50px var(--shadow-earth-medium),
+                0 0 70px var(--shadow-earth-light);
         }
 
         /* ═══════════════════════════════════════════════════════════════
@@ -667,17 +704,17 @@
             }
 
             .footer {
-                margin-top: 200px;
-                padding-top: 100px;
-                padding-bottom: 140px;
-                font-size: 14px;
+                margin-top: var(--mobile-footer-margin-top);
+                padding-top: var(--mobile-footer-padding-top);
+                padding-bottom: var(--mobile-footer-padding-bottom);
+                font-size: var(--mobile-footer-size);
             }
 
             #sound-control {
-                bottom: 15px;
-                right: 15px;
-                font-size: 16px;
-                padding: 10px 14px;
+                bottom: var(--mobile-sound-control-position);
+                right: var(--mobile-sound-control-position);
+                font-size: var(--mobile-sound-control-size);
+                padding: var(--mobile-sound-control-padding-vertical) var(--mobile-sound-control-padding-horizontal);
             }
         }
 
