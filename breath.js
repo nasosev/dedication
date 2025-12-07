@@ -75,11 +75,11 @@ const SPATIAL_QUALITIES = {
     DRIFT_BOUNCE: -0.5,               // Boundary bounce factor
 
     // Magnetic Interaction - Cursor/touch response
-    MAGNETIC_EASE: 0.002,             // Interpolation speed (lower = slower, more organic)
-    MAGNETIC_RADIUS_DESKTOP: 200,     // Detection radius for mouse (px)
-    MAGNETIC_RADIUS_MOBILE: 180,      // Detection radius for touch (px)
-    MAGNETIC_PULL_STRENGTH: 5,        // Maximum pull distance multiplier
-    MAGNETIC_SCALE_MAX: 3,            // Maximum growth
+    MAGNETIC_EASE: 0.001,            // Interpolation speed (lower = slower, more organic)
+    MAGNETIC_RADIUS_DESKTOP: 100,     // Detection radius for mouse (px)
+    MAGNETIC_RADIUS_MOBILE: 100,      // Detection radius for touch (px)
+    MAGNETIC_PULL_STRENGTH: 2,        // Maximum pull distance multiplier
+    MAGNETIC_SCALE_MAX: 2,            // Maximum growth
 
     // Mandala Magnetic Interaction
     MANDALA_MAGNETIC_RADIUS_DESKTOP: 150,  // Detection radius for mouse (px)
