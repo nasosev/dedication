@@ -908,123 +908,48 @@
     </script>
 
     <script>
-        // Altar Video - Different behaviors for each video
+        // Altar Videos - Play on hover, pause when defocused
         const altarVideos = document.querySelectorAll('.altar');
-        const firstVideo = altarVideos[0];  // alter.mp4 - play on hover
-        const secondVideo = altarVideos[1]; // zoom-slow-pingpong.mp4 - always plays, reverses on hover
 
-        // First video: Play on hover/touch (original behavior)
-        if (firstVideo) {
-            firstVideo.load();
+        altarVideos.forEach(function (video) {
+            video.load();
 
-            // Mouse hover
-            firstVideo.addEventListener('mouseenter', function () {
+            // Mouse hover - play
+            video.addEventListener('mouseenter', function () {
                 this.play().catch(() => { });
             });
 
-            firstVideo.addEventListener('mouseleave', function () {
+            // Mouse leave - pause
+            video.addEventListener('mouseleave', function () {
                 this.pause();
             });
 
-            // Touch support
-            firstVideo.addEventListener('touchstart', function () {
+            // Touch support - play on touch
+            video.addEventListener('touchstart', function () {
                 this.play().catch(() => { });
             });
 
-            // Pause when touch moves away
+            // Pause when touch moves away from video
             document.addEventListener('touchmove', function (e) {
                 const touch = e.touches[0];
-                const rect = firstVideo.getBoundingClientRect();
+                const rect = video.getBoundingClientRect();
                 const isOverVideo = touch.clientX >= rect.left &&
                     touch.clientX <= rect.right &&
                     touch.clientY >= rect.top &&
                     touch.clientY <= rect.bottom;
 
                 if (!isOverVideo) {
-                    firstVideo.pause();
+                    video.pause();
                 } else {
-                    firstVideo.play().catch(() => { });
+                    video.play().catch(() => { });
                 }
             }, { passive: true });
 
+            // Pause when touch ends
             document.addEventListener('touchend', function () {
-                firstVideo.pause();
+                video.pause();
             });
-        }
-
-        // Second video: Always plays, reverses on hover
-        if (secondVideo) {
-            let isReversing = false;
-            let reverseAnimationId = null;
-            let lastTime = 0;
-
-            secondVideo.load();
-            secondVideo.play().catch(() => { });
-
-            function reversePlayback(timestamp) {
-                if (!lastTime) lastTime = timestamp;
-                const deltaTime = (timestamp - lastTime) / 1000; // Convert to seconds
-                lastTime = timestamp;
-
-                if (isReversing && secondVideo.currentTime > 0) {
-                    // Move backwards at normal playback speed
-                    secondVideo.currentTime = Math.max(0, secondVideo.currentTime - deltaTime);
-                    reverseAnimationId = requestAnimationFrame(reversePlayback);
-                } else if (isReversing && secondVideo.currentTime <= 0) {
-                    // Reached the beginning, pause reverse
-                    isReversing = false;
-                    lastTime = 0;
-                    secondVideo.play().catch(() => { });
-                }
-            }
-
-            // Mouse hover - start reversing
-            secondVideo.addEventListener('mouseenter', function () {
-                isReversing = true;
-                lastTime = 0;
-                this.pause();
-                reverseAnimationId = requestAnimationFrame(reversePlayback);
-            });
-
-            // Mouse leave - resume forward playback
-            secondVideo.addEventListener('mouseleave', function () {
-                isReversing = false;
-                lastTime = 0;
-                if (reverseAnimationId) {
-                    cancelAnimationFrame(reverseAnimationId);
-                    reverseAnimationId = null;
-                }
-                this.play().catch(() => { });
-            });
-
-            // Loop the video when it ends
-            secondVideo.addEventListener('ended', function () {
-                this.currentTime = 0;
-                this.play().catch(() => { });
-            });
-
-            // Touch support - toggle reverse on touch
-            let isTouchReversing = false;
-            secondVideo.addEventListener('touchstart', function (e) {
-                e.preventDefault();
-                if (!isTouchReversing) {
-                    isTouchReversing = true;
-                    isReversing = true;
-                    lastTime = 0;
-                    this.pause();
-                    reverseAnimationId = requestAnimationFrame(reversePlayback);
-                } else {
-                    isTouchReversing = false;
-                    isReversing = false;
-                    lastTime = 0;
-                    if (reverseAnimationId) {
-                        cancelAnimationFrame(reverseAnimationId);
-                        reverseAnimationId = null;
-                    }
-                    this.play().catch(() => { });
-                }
-            });
-        }
+        });
     </script>
 </body>
 
